@@ -1,4 +1,4 @@
-package keycloak
+package impl
 
 import (
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"

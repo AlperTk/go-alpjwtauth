@@ -6,7 +6,6 @@ import (
 	controllers2 "github.com/AlperTk/go-jwt-role-based-auth/example/authentication/controllers"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl/keycloak"
 	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service/imp"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
@@ -45,7 +44,7 @@ func init() {
 }
 
 func load() ApplicationStarter {
-	tokenProcessor := keycloak.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
+	tokenProcessor := impl.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
 	webSecurity := securityConfig.WebSecurityConfig{}
 	alpAuthorizer := authorization.NewBasicRoleAuthorizer(webSecurity)
