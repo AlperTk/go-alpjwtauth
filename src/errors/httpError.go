@@ -1,29 +1,35 @@
 package errors
 
+import "time"
+
+var timeFormat = "2006-01-02T15:04:05.000:00"
+
 type HttpError struct {
-	Code    int    `json:"code"`
-	Error   string `json:"error"`
-	Message string `json:"message"`
+	Timestamp string `json:"timestamp"`
+	Status    int    `json:"status"`
+	Error     string `json:"error"`
 }
 
 func NotFound() HttpError {
 	return HttpError{
+		time.Now().Format(timeFormat),
 		404,
 		"Not Found",
-		"Requested resource not found",
 	}
 }
+
 func UnauthorizedError() HttpError {
 	return HttpError{
+		time.Now().Format(timeFormat),
 		401,
 		"Unauthorized",
-		"You are not authorized to access this resource",
 	}
 }
+
 func ForbiddenRequestError() *HttpError {
 	return &HttpError{
+		time.Now().Format(timeFormat),
 		403,
 		"Forbidden",
-		"Not authorized",
 	}
 }

@@ -34,34 +34,59 @@ func (j JwtAuth) protect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 
-		roles, err := j.tokenValidate(r)
-		if err != nil {
-			responseAuthorized(w)
-			return
-		}
+		authHeader := r.Header.Get("Authorization")
+		if len(authHeader) > 0 {
+			roles, err := j.tokenValidate(r)
+			if err != nil {
+				responseUnauthorized(w)
+				return
+			}
 
-		if j.RoleAuthor != nil {
-			_, e := j.RoleAuthor.Process(roles, w, r)
-			if e != nil {
+			if j.RoleAuthor != nil {
+				_, e := j.RoleAuthor.ProcessAuthorized(roles, w, r)
+				if e != nil {
+					return
+				}
+			}
+
+			next.ServeHTTP(w, r)
+		} else {
+			defined, e := j.RoleAuthor.ProcessUnauthorized(w, r)
+			if defined && e != nil {
+				return
+			} else {
+				next.ServeHTTP(w, r)
 				return
 			}
 		}
 
-		next.ServeHTTP(w, r)
 	})
 }
 
 func (j JwtAuth) notFoundHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
-		_, err := j.tokenValidate(r)
 
-		if err != nil {
-			responseAuthorized(w)
-			return
+		authHeader := r.Header.Get("Authorization")
+		if len(authHeader) > 0 {
+			_, err := j.tokenValidate(r)
+
+			if err == nil {
+				notFound(w)
+				return
+			}
+
+		} else {
+			if j.RoleAuthor != nil {
+				defined, e := j.RoleAuthor.ProcessUnauthorized(w, r)
+				if defined && e == nil {
+					notFound(w)
+					return
+				}
+			}
 		}
 
-		notFound(w)
+		responseUnauthorized(w)
 	})
 }
 
@@ -85,7 +110,7 @@ func (j JwtAuth) tokenValidate(r *http.Request) ([]string, error) {
 	return roles, nil
 }
 
-func responseAuthorized(w http.ResponseWriter) {
+func responseUnauthorized(w http.ResponseWriter) {
 	w.WriteHeader(401)
 	_ = json.NewEncoder(w).Encode(errors.UnauthorizedError())
 }
