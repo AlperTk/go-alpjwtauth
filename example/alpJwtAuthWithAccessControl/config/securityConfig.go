@@ -1,7 +1,7 @@
 package securityConfig
 
 import (
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roleBuilder"
+	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roleBuilder"
 )
 
 type WebSecurityConfig struct {

@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
+	"github.com/AlperTk/go-alpjwtauth/src/authentication"
 	"github.com/Masterminds/log-go"
 	"github.com/MicahParks/keyfunc"
 	"github.com/golang-jwt/jwt/v4"

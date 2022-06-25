@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	errors2 "errors"
 	"fmt"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roadBuillder"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roleBuilder"
-	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/model"
-	authorization2 "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/errors"
+	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roadBuillder"
+	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roleBuilder"
+	authorization "github.com/AlperTk/go-alpjwtauth/src/authorization/model"
+	authorization2 "github.com/AlperTk/go-alpjwtauth/src/authorization/service"
+	"github.com/AlperTk/go-alpjwtauth/src/errors"
 	"net/http"
 )
 

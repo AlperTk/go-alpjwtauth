@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/AlperTk/go-jwt-role-based-auth/example/authentication/config"
-	controllers2 "github.com/AlperTk/go-jwt-role-based-auth/example/authentication/controllers"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl"
-	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service/imp"
+	"github.com/AlperTk/go-alpjwtauth/src/authentication"
+	"github.com/AlperTk/go-alpjwtauth/src/authentication/impl"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
@@ -46,9 +43,7 @@ func init() {
 func load() ApplicationStarter {
 	tokenProcessor := impl.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
-	webSecurity := securityConfig.WebSecurityConfig{}
-	alpAuthorizer := authorization.NewBasicRoleAuthorizer(webSecurity)
-	alpJwtAuth := impl.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
+	alpJwtAuth := impl.NewJwtAuth(tokenProcessor)
 
 	p := ApplicationStarter{
 		AlpJwtAuth: alpJwtAuth,
@@ -60,14 +55,7 @@ func (p ApplicationStarter) run() {
 	router := mux.NewRouter().StrictSlash(true)
 	p.AlpJwtAuth.SetupMux(router)
 
-	registerRoutes(router)
+	//router.Handle("/api/v1/test", http.HandlerFunc(testFunc)).Methods("POST")
+
 	log.Fatal(http.ListenAndServe(":9702", router))
-}
-
-func registerRoutes(router *mux.Router) {
-	registerControllerRoutes(controllers2.EventController{}, router)
-}
-
-func registerControllerRoutes(controller controllers2.Controller, router *mux.Router) {
-	controller.RegisterRoutes(router)
 }
