@@ -32,6 +32,7 @@ func (j JwtAuth) SetupMux(router *mux.Router) {
 
 func (j JwtAuth) protect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
 
 		roles, err := j.tokenValidate(r)
 		if err != nil {

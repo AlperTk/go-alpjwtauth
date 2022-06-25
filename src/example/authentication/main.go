@@ -11,10 +11,8 @@ import (
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 	logrusImp "github.com/sirupsen/logrus"
 	"net/http"
-	"os"
 	"runtime"
 )
 
@@ -28,6 +26,8 @@ func main() {
 }
 
 func init() {
+	// init logger
+
 	logger := logrusImp.New()
 	logger.SetReportCaller(true)
 	logger.SetFormatter(&nested.Formatter{CustomCallerFormatter: func(frame *runtime.Frame) string {
@@ -38,19 +38,13 @@ func init() {
 			funcName = details.Name()
 			return fmt.Sprintf(" <-- (%s:%d)", funcName, line)
 		}
-		return " <-- (test)"
+		return " <-- (Unknown)"
 	}})
 	log.Current = logrus.New(logger)
 }
 
 func load() ApplicationStarter {
-	err := godotenv.Load("properties.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	var tokenProcessor authentication.TokenProcessor
-	tokenProcessor = keycloak.NewKeycloakTokenProcessor(os.Getenv("KEYCOLAK_ADDRESS"))
+	tokenProcessor := keycloak.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
 	webSecurity := securityConfig.WebSecurityConfig{}
 
@@ -67,11 +61,10 @@ func load() ApplicationStarter {
 
 func (p ApplicationStarter) run() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.Use(defaultResponseTypeSetter)
 	p.JwtAuth.SetupMux(router)
 
 	registerRoutes(router)
-	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDR"), router))
+	log.Fatal(http.ListenAndServe(":9702", router))
 }
 
 func registerRoutes(router *mux.Router) {
@@ -80,14 +73,4 @@ func registerRoutes(router *mux.Router) {
 
 func registerControllerRoutes(controller controllers.Controller, router *mux.Router) {
 	controller.RegisterRoutes(router)
-}
-
-func defaultResponseTypeSetter(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, Host, Origin, User-Agent, Referer, Cache-Control, X-header")
-		next.ServeHTTP(w, r)
-	})
 }
