@@ -23,17 +23,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/AlperTk/go-jwt-role-based-auth/example/authentication/config"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl/keycloak"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl"
 	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service/imp"
+	"github.com/Masterminds/log-go"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
-	"test/src/config"
 )
 
 type ApplicationStarter struct {
-	JwtAuth authentication.JwtAuth
+	AlpJwtAuth authentication.AlpJwtAuth
 }
 
 func main() {
@@ -42,28 +42,25 @@ func main() {
 }
 
 func load() ApplicationStarter {
-	tokenProcessor := keycloak.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
+	tokenProcessor := impl.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
-	securityConfig := config.SecurityConfig{}
-
-	jwtAuth := authentication.JwtAuth{
-		TokenProcessor: tokenProcessor,
-		RoleAuthor:     authorization.NewBasicRoleAuthorizer(securityConfig),
-	}
+	webSecurity := securityConfig.WebSecurityConfig{}
+	alpAuthorizer := authorization.NewBasicRoleAuthorizer(webSecurity)
+	alpJwtAuth := impl.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
 
 	p := ApplicationStarter{
-		JwtAuth: jwtAuth,
+		AlpJwtAuth: alpJwtAuth,
 	}
 	return p
 }
 
 func (p ApplicationStarter) run() {
 	router := mux.NewRouter().StrictSlash(true)
-	p.JwtAuth.SetupMux(router)
+	p.AlpJwtAuth.SetupMux(router)
 
-	//router.Handle("/api/v1/test", http.HandlerFunc(postTest)).Methods("POST")
-
-	log.Fatal(http.ListenAndServe(":9701", router))
+	//router.Handle("/api/v1/test", http.HandlerFunc(testFunc)).Methods("POST")
+	
+	log.Fatal(http.ListenAndServe(":9702", router))
 }
 
 ```
