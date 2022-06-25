@@ -1,12 +1,12 @@
 package roleBuilder
 
 import (
-	"JwtAuth/src/authorization/builder/roadBuillder"
-	authorization3 "JwtAuth/src/authorization/model"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roadBuillder"
+	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/model"
 )
 
 type RoleConfigurer struct {
-	RequestRoad  *roadBuillder.RoadBuilder[authorization3.RoleModel]
+	RequestRoad  *roadBuillder.RoadBuilder[authorization.RoleModel]
 	levelCounter int
 }
 

@@ -1,19 +1,19 @@
 package roleBuilder
 
 import (
-	"JwtAuth/src/authorization/builder/roadBuillder"
-	authorization3 "JwtAuth/src/authorization/model"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roadBuillder"
+	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/model"
 	"github.com/Masterminds/log-go"
 )
 
 type RoleBuilder struct {
 	Endpoints   []string
 	Caller      *RoleConfigurer
-	requestRoad *roadBuillder.RoadBuilder[authorization3.RoleModel]
+	requestRoad *roadBuillder.RoadBuilder[authorization.RoleModel]
 }
 
-func createIfNotExist(roleRoad *roadBuillder.RoadBuilder[authorization3.RoleModel], endpoint string) *authorization3.RoleModel {
-	data := &authorization3.RoleModel{
+func createIfNotExist(roleRoad *roadBuillder.RoadBuilder[authorization.RoleModel], endpoint string) *authorization.RoleModel {
+	data := &authorization.RoleModel{
 		Authenticated: false,
 		Denied:        false,
 		Permitted:     false,

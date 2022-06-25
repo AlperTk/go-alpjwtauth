@@ -1,23 +1,23 @@
 package authorization
 
 import (
-	"JwtAuth/src/authorization/builder/roadBuillder"
-	roleBuilder2 "JwtAuth/src/authorization/builder/roleBuilder"
-	authorization3 "JwtAuth/src/authorization/model"
-	"JwtAuth/src/errors"
 	"encoding/json"
 	errors2 "errors"
 	"fmt"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roadBuillder"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roleBuilder"
+	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/model"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/errors"
 	"net/http"
 )
 
 type basicRoleAuthorizer struct {
-	securityConfig roleBuilder2.SecurityConfig
-	requestRoad    *roadBuillder.RoadBuilder[authorization3.RoleModel]
+	securityConfig roleBuilder.SecurityConfig
+	requestRoad    *roadBuillder.RoadBuilder[authorization.RoleModel]
 }
 
-func NewBasicRoleAuthorizer(securityConfig roleBuilder2.SecurityConfig) *basicRoleAuthorizer {
-	instance := basicRoleAuthorizer{securityConfig: securityConfig, requestRoad: roadBuillder.NewRoadBuilder[authorization3.RoleModel]()}
+func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) *basicRoleAuthorizer {
+	instance := basicRoleAuthorizer{securityConfig: securityConfig, requestRoad: roadBuillder.NewRoadBuilder[authorization.RoleModel]()}
 	instance.loadConfig()
 	return &instance
 }
@@ -39,7 +39,7 @@ func (b *basicRoleAuthorizer) ProcessAuthorized(roles []string, w http.ResponseW
 	return defined, err
 }
 
-func processRequestRoadBeforeAuth(r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization3.RoleModel]) (defined bool, err error) {
+func processRequestRoadBeforeAuth(r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization.RoleModel]) (defined bool, err error) {
 	securityDef, _ := requestRoad.Get(r.RequestURI)
 	if securityDef == nil {
 		return false, fmt.Errorf("no securityDef find")
@@ -56,7 +56,7 @@ func processRequestRoadBeforeAuth(r *http.Request, requestRoad *roadBuillder.Roa
 	return false, fmt.Errorf("not authorized")
 }
 
-func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization3.RoleModel]) (defined bool, err error) {
+func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization.RoleModel]) (defined bool, err error) {
 	securityDef, _ := requestRoad.Get(r.RequestURI)
 	if securityDef == nil {
 		return false, fmt.Errorf("no securityDef find")
@@ -90,7 +90,7 @@ func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *
 }
 
 func (b *basicRoleAuthorizer) loadConfig() {
-	roleConfigurer := roleBuilder2.RoleConfigurer{RequestRoad: b.requestRoad}
+	roleConfigurer := roleBuilder.RoleConfigurer{RequestRoad: b.requestRoad}
 	b.securityConfig.Config(&roleConfigurer)
 }
 

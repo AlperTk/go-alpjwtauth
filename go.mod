@@ -1,4 +1,4 @@
-module JwtAuth
+module github.com/AlperTk/go-jwt-role-based-auth
 
 go 1.18
 
@@ -8,7 +8,6 @@ require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/gorilla/mux v1.8.0
-	github.com/joho/godotenv v1.4.0
 	github.com/sirupsen/logrus v1.8.1
 )
 

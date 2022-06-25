@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"JwtAuth/src/example/authentication/services"
 	"encoding/json"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/example/authentication/services"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"

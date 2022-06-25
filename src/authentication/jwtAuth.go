@@ -1,11 +1,11 @@
 package authentication
 
 import (
-	authorization "JwtAuth/src/authorization/service"
-	"JwtAuth/src/errors"
 	"crypto/tls"
 	"encoding/json"
 	errors2 "errors"
+	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/errors"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"

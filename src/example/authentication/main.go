@@ -1,12 +1,12 @@
 package main
 
 import (
-	"JwtAuth/src/authentication"
-	"JwtAuth/src/authentication/impl/keycloak"
-	roleAuth "JwtAuth/src/authorization/service/imp"
-	securityConfig "JwtAuth/src/example/authentication/config"
-	"JwtAuth/src/example/authentication/controllers"
 	"fmt"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl/keycloak"
+	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service/imp"
+	securityConfig "github.com/AlperTk/go-jwt-role-based-auth/src/example/authentication/config"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/example/authentication/controllers"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
@@ -50,7 +50,7 @@ func load() ApplicationStarter {
 
 	jwtAuth := authentication.JwtAuth{
 		TokenProcessor: tokenProcessor,
-		RoleAuthor:     roleAuth.NewBasicRoleAuthorizer(webSecurity),
+		RoleAuthor:     authorization.NewBasicRoleAuthorizer(webSecurity),
 	}
 
 	p := ApplicationStarter{

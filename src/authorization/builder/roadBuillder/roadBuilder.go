@@ -1,9 +1,9 @@
 package roadBuillder
 
 import (
-	"JwtAuth/src/authorization"
 	"errors"
 	"fmt"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization"
 	"strings"
 )
 
