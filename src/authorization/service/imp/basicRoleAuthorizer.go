@@ -7,6 +7,7 @@ import (
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roadBuillder"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authorization/builder/roleBuilder"
 	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/model"
+	authorization2 "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/errors"
 	"net/http"
 )
@@ -16,7 +17,7 @@ type basicRoleAuthorizer struct {
 	requestRoad    *roadBuillder.RoadBuilder[authorization.RoleModel]
 }
 
-func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) *basicRoleAuthorizer {
+func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) authorization2.AlpAuthorizer {
 	instance := basicRoleAuthorizer{securityConfig: securityConfig, requestRoad: roadBuillder.NewRoadBuilder[authorization.RoleModel]()}
 	instance.loadConfig()
 	return &instance

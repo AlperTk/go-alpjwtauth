@@ -1,6 +1,7 @@
 package keycloak
 
 import (
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
 	"github.com/Masterminds/log-go"
 	"github.com/MicahParks/keyfunc"
 	"github.com/golang-jwt/jwt/v4"
@@ -10,6 +11,10 @@ import (
 
 type keycloakTokenProcessor struct {
 	JwksUrl string
+}
+
+func NewKeycloakTokenProcessor(jwksUrl string) authentication.TokenProcessor {
+	return &keycloakTokenProcessor{jwksUrl}
 }
 
 var _jwks *keyfunc.JWKS
@@ -71,8 +76,4 @@ func (t keycloakTokenProcessor) Process(bearerToken string, r *http.Request) (bo
 	}
 
 	return true, roleArray, nil
-}
-
-func NewKeycloakTokenProcessor(jwksUrl string) *keycloakTokenProcessor {
-	return &keycloakTokenProcessor{jwksUrl}
 }

@@ -1,9 +1,10 @@
-package authentication
+package impl
 
 import (
 	"crypto/tls"
 	"encoding/json"
 	errors2 "errors"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
 	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/errors"
 	"github.com/gorilla/mux"
@@ -11,9 +12,17 @@ import (
 	"strings"
 )
 
-type JwtAuth struct {
-	TokenProcessor TokenProcessor
-	RoleAuthor     authorization.Authorizer
+type jwtAuth struct {
+	TokenProcessor authentication.TokenProcessor
+	RoleAuthor     authorization.AlpAuthorizer
+}
+
+func NewJwtAuth(processor authentication.TokenProcessor) authentication.AlpJwtAuth {
+	return jwtAuth{TokenProcessor: processor}
+}
+
+func NewJwtAuthWithAccessControl(processor authentication.TokenProcessor, authorizer authorization.AlpAuthorizer) authentication.AlpJwtAuth {
+	return jwtAuth{TokenProcessor: processor, RoleAuthor: authorizer}
 }
 
 func init() {
@@ -25,12 +34,12 @@ func init() {
 	}
 }
 
-func (j JwtAuth) SetupMux(router *mux.Router) {
+func (j jwtAuth) SetupMux(router *mux.Router) {
 	router.Use(j.protect)
 	router.NotFoundHandler = j.notFoundHandler()
 }
 
-func (j JwtAuth) protect(next http.Handler) http.Handler {
+func (j jwtAuth) protect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 
@@ -63,7 +72,7 @@ func (j JwtAuth) protect(next http.Handler) http.Handler {
 	})
 }
 
-func (j JwtAuth) notFoundHandler() http.Handler {
+func (j jwtAuth) notFoundHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 
@@ -90,7 +99,7 @@ func (j JwtAuth) notFoundHandler() http.Handler {
 	})
 }
 
-func (j JwtAuth) tokenValidate(r *http.Request) ([]string, error) {
+func (j jwtAuth) tokenValidate(r *http.Request) ([]string, error) {
 	authHeader := r.Header.Get("Authorization")
 
 	if len(authHeader) < 1 {

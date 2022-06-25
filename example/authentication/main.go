@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/AlperTk/go-jwt-role-based-auth/example/authentication/config"
+	controllers2 "github.com/AlperTk/go-jwt-role-based-auth/example/authentication/controllers"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication"
+	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl"
 	"github.com/AlperTk/go-jwt-role-based-auth/src/authentication/impl/keycloak"
 	authorization "github.com/AlperTk/go-jwt-role-based-auth/src/authorization/service/imp"
-	securityConfig "github.com/AlperTk/go-jwt-role-based-auth/src/example/authentication/config"
-	"github.com/AlperTk/go-jwt-role-based-auth/src/example/authentication/controllers"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
@@ -17,7 +18,7 @@ import (
 )
 
 type ApplicationStarter struct {
-	JwtAuth authentication.JwtAuth
+	AlpJwtAuth authentication.AlpJwtAuth
 }
 
 func main() {
@@ -47,30 +48,27 @@ func load() ApplicationStarter {
 	tokenProcessor := keycloak.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
 	webSecurity := securityConfig.WebSecurityConfig{}
-
-	jwtAuth := authentication.JwtAuth{
-		TokenProcessor: tokenProcessor,
-		RoleAuthor:     authorization.NewBasicRoleAuthorizer(webSecurity),
-	}
+	alpAuthorizer := authorization.NewBasicRoleAuthorizer(webSecurity)
+	alpJwtAuth := impl.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
 
 	p := ApplicationStarter{
-		JwtAuth: jwtAuth,
+		AlpJwtAuth: alpJwtAuth,
 	}
 	return p
 }
 
 func (p ApplicationStarter) run() {
 	router := mux.NewRouter().StrictSlash(true)
-	p.JwtAuth.SetupMux(router)
+	p.AlpJwtAuth.SetupMux(router)
 
 	registerRoutes(router)
 	log.Fatal(http.ListenAndServe(":9702", router))
 }
 
 func registerRoutes(router *mux.Router) {
-	registerControllerRoutes(controllers.EventController{}, router)
+	registerControllerRoutes(controllers2.EventController{}, router)
 }
 
-func registerControllerRoutes(controller controllers.Controller, router *mux.Router) {
+func registerControllerRoutes(controller controllers2.Controller, router *mux.Router) {
 	controller.RegisterRoutes(router)
 }
