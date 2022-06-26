@@ -59,7 +59,9 @@ func (p ApplicationStarter) run() {
 	router := mux.NewRouter().StrictSlash(true)
 	p.AlpJwtAuth.SetupMux(router)
 
-	//router.Handle("/api/v1/test", http.HandlerFunc(testFunc)).Methods("POST")
+	router.Handle("/api/v1/test", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+
+	})).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":9702", router))
 }

@@ -27,7 +27,6 @@ func (b *basicRoleAuthorizer) ProcessUnauthorized(w http.ResponseWriter, r *http
 	defined, err = processRequestRoadBeforeAuth(r, b.requestRoad)
 	if defined && err != nil {
 		responseUnauthorized(w)
-		//responseForbidden(w)
 	}
 	return defined, err
 }
@@ -54,7 +53,7 @@ func processRequestRoadBeforeAuth(r *http.Request, requestRoad *roadBuillder.Roa
 		return true, nil
 	}
 
-	return false, fmt.Errorf("not authorized")
+	return true, fmt.Errorf("not authorized")
 }
 
 func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization.RoleModel]) (defined bool, err error) {

@@ -60,10 +60,8 @@ func (j jwtAuth) protect(next http.Handler) http.Handler {
 
 			next.ServeHTTP(w, r)
 		} else {
-			defined, e := j.RoleAuthor.ProcessUnauthorized(w, r)
-			if defined && e != nil {
-				return
-			} else {
+			_, e := j.RoleAuthor.ProcessUnauthorized(w, r)
+			if e == nil {
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -90,8 +88,8 @@ func (j jwtAuth) notFoundHandler() http.Handler {
 				defined, e := j.RoleAuthor.ProcessUnauthorized(w, r)
 				if defined && e == nil {
 					notFound(w)
-					return
 				}
+				return
 			}
 		}
 
