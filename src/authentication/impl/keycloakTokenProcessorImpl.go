@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"errors"
 	"github.com/AlperTk/go-alpjwtauth/src/authentication"
 	"github.com/Masterminds/log-go"
 	"github.com/MicahParks/keyfunc"
@@ -47,7 +48,7 @@ func (k keycloakTokenProcessor) getKeycloakCert() (jwks *keyfunc.JWKS, err error
 	return _jwks, nil
 }
 
-func (t keycloakTokenProcessor) Process(bearerToken string, r *http.Request) (bool, []string, error) {
+func (t keycloakTokenProcessor) Process(bearerToken string, r *http.Request) (valid bool, roles []string, err error) {
 
 	jwks, err := t.getKeycloakCert()
 
@@ -60,18 +61,18 @@ func (t keycloakTokenProcessor) Process(bearerToken string, r *http.Request) (bo
 	token, err := jwt.ParseWithClaims(bearerToken, claims, jwks.Keyfunc)
 	if err != nil {
 		log.Error("Token validation error. ip: ", r.RemoteAddr, ", msg: ", err.Error())
-		return false, nil, nil
+		return false, nil, err
 	}
 
 	if !token.Valid {
 		log.Error("The token is not valid.")
-		return false, nil, nil
+		return false, nil, errors.New("token is not valid")
 	}
 
-	roles := claims["realm_access"].(map[string]interface{})["roles"].([]interface{})
+	tokenRoles := claims["realm_access"].(map[string]interface{})["roles"].([]interface{})
 
-	roleArray := make([]string, len(roles))
-	for i, v := range roles {
+	roleArray := make([]string, len(tokenRoles))
+	for i, v := range tokenRoles {
 		roleArray[i] = v.(string)
 	}
 

@@ -59,11 +59,11 @@ func processRequestRoadBeforeAuth(r *http.Request, requestRoad *roadBuillder.Roa
 func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *roadBuillder.RoadBuilder[authorization.RoleModel]) (defined bool, err error) {
 	securityDef, _ := requestRoad.Get(r.RequestURI)
 	if securityDef == nil {
-		return false, fmt.Errorf("no securityDef find")
+		return false, errors2.New("no securityDef find")
 	}
 
 	if securityDef.Denied {
-		return true, fmt.Errorf("request denied")
+		return true, errors2.New("request denied")
 	}
 
 	if securityDef.Authenticated {
