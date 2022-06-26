@@ -10,6 +10,14 @@ type HttpError struct {
 	Error     string `json:"error"`
 }
 
+func MethodNotAllowed() HttpError {
+	return HttpError{
+		time.Now().Format(timeFormat),
+		405,
+		"Method Not Allowed",
+	}
+}
+
 func NotFound() HttpError {
 	return HttpError{
 		time.Now().Format(timeFormat),
@@ -18,18 +26,18 @@ func NotFound() HttpError {
 	}
 }
 
-func UnauthorizedError() HttpError {
-	return HttpError{
-		time.Now().Format(timeFormat),
-		401,
-		"Unauthorized",
-	}
-}
-
 func ForbiddenRequestError() *HttpError {
 	return &HttpError{
 		time.Now().Format(timeFormat),
 		403,
 		"Forbidden",
+	}
+}
+
+func UnauthorizedError() HttpError {
+	return HttpError{
+		time.Now().Format(timeFormat),
+		401,
+		"Unauthorized",
 	}
 }

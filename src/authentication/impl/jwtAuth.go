@@ -36,7 +36,8 @@ func init() {
 
 func (j jwtAuth) SetupMux(router *mux.Router) {
 	router.Use(j.protect)
-	router.NotFoundHandler = j.notFoundHandler()
+	router.NotFoundHandler = j.responseHandler(notFound)
+	router.MethodNotAllowedHandler = j.responseHandler(methodNotAllowed)
 }
 
 func (j jwtAuth) protect(next http.Handler) http.Handler {
@@ -70,7 +71,7 @@ func (j jwtAuth) protect(next http.Handler) http.Handler {
 	})
 }
 
-func (j jwtAuth) notFoundHandler() http.Handler {
+func (j jwtAuth) responseHandler(response func(w http.ResponseWriter)) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 
@@ -79,7 +80,7 @@ func (j jwtAuth) notFoundHandler() http.Handler {
 			_, err := j.tokenValidate(r)
 
 			if err == nil {
-				notFound(w)
+				response(w)
 				return
 			}
 
@@ -87,7 +88,7 @@ func (j jwtAuth) notFoundHandler() http.Handler {
 			if j.RoleAuthor != nil {
 				defined, e := j.RoleAuthor.ProcessUnauthorized(w, r)
 				if defined && e == nil {
-					notFound(w)
+					response(w)
 				}
 				return
 			}
@@ -125,4 +126,9 @@ func responseUnauthorized(w http.ResponseWriter) {
 func notFound(w http.ResponseWriter) {
 	w.WriteHeader(404)
 	_ = json.NewEncoder(w).Encode(errors.NotFound())
+}
+
+func methodNotAllowed(w http.ResponseWriter) {
+	w.WriteHeader(405)
+	_ = json.NewEncoder(w).Encode(errors.MethodNotAllowed())
 }

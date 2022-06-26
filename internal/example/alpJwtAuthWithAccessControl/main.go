@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/AlperTk/go-alpjwtauth/internal/example/alpJwtAuthWithAccessControl/config"
 	"github.com/AlperTk/go-alpjwtauth/src/authentication"
@@ -60,7 +61,7 @@ func (p ApplicationStarter) run() {
 	p.AlpJwtAuth.SetupMux(router)
 
 	router.Handle("/api/v1/test", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-
+		_ = json.NewEncoder(writer).Encode("AlperTk")
 	})).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":9702", router))
