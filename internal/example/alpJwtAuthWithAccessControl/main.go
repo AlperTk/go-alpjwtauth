@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	securityConfig "github.com/AlperTk/go-alpjwtauth/example/alpJwtAuthWithAccessControl/config"
+	"github.com/AlperTk/go-alpjwtauth/internal/example/alpJwtAuthWithAccessControl/config"
 	"github.com/AlperTk/go-alpjwtauth/src/authentication"
 	"github.com/AlperTk/go-alpjwtauth/src/authentication/impl"
 	authorization "github.com/AlperTk/go-alpjwtauth/src/authorization/service/imp"
