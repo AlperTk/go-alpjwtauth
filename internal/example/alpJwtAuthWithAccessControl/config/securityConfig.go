@@ -1,13 +1,11 @@
 package securityConfig
 
-import (
-	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roleBuilder"
-)
+import "github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roleBuilder"
 
-type WebSecurityConfig struct {
+type SecurityConfig struct {
 }
 
-func (s WebSecurityConfig) Config(security *roleBuilder.RoleConfigurer) {
+func (s SecurityConfig) Config(security *roleBuilder.RoleConfigurer) {
 	security.
 		//AntMatcher("/api/v1/**").PermitAll().
 		//AntMatcher("/api2/v1/test").HasAnyRoles("Admin").

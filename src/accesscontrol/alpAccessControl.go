@@ -1,4 +1,4 @@
-package authorization
+package accesscontrol
 
 import "net/http"
 

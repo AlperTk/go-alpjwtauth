@@ -1,11 +1,10 @@
-package impl
+package authorization
 
 import (
 	"crypto/tls"
 	"encoding/json"
 	errors2 "errors"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication"
-	authorization "github.com/AlperTk/go-alpjwtauth/src/authorization/service"
+	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol"
 	"github.com/AlperTk/go-alpjwtauth/src/errors"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -13,15 +12,15 @@ import (
 )
 
 type jwtAuth struct {
-	TokenProcessor authentication.TokenProcessor
-	RoleAuthor     authorization.AlpAuthorizer
+	TokenProcessor TokenProcessor
+	RoleAuthor     accesscontrol.AlpAuthorizer
 }
 
-func NewJwtAuth(processor authentication.TokenProcessor) authentication.AlpJwtAuth {
+func NewJwtAuth(processor TokenProcessor) AlpJwtAuth {
 	return jwtAuth{TokenProcessor: processor}
 }
 
-func NewJwtAuthWithAccessControl(processor authentication.TokenProcessor, authorizer authorization.AlpAuthorizer) authentication.AlpJwtAuth {
+func NewJwtAuthWithAccessControl(processor TokenProcessor, authorizer accesscontrol.AlpAuthorizer) AlpJwtAuth {
 	return jwtAuth{TokenProcessor: processor, RoleAuthor: authorizer}
 }
 
@@ -102,7 +101,7 @@ func (j jwtAuth) tokenValidate(r *http.Request) ([]string, error) {
 	authHeader := r.Header.Get("Authorization")
 
 	if len(authHeader) < 1 {
-		return nil, errors2.New("no authorization token find")
+		return nil, errors2.New("no accesscontrol token find")
 	}
 
 	bearerToken := strings.Split(authHeader, " ")[1]

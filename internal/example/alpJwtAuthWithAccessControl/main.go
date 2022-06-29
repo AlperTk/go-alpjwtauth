@@ -4,20 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/AlperTk/go-alpjwtauth/internal/example/alpJwtAuthWithAccessControl/config"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication/impl"
-	authorization "github.com/AlperTk/go-alpjwtauth/src/authorization/service/imp"
-	"github.com/Masterminds/log-go"
-	"github.com/Masterminds/log-go/impl/logrus"
-	nested "github.com/antonfisher/nested-logrus-formatter"
+	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol"
+	"github.com/AlperTk/go-alpjwtauth/src/authorization"
 	"github.com/gorilla/mux"
-	logrusImp "github.com/sirupsen/logrus"
 	"net/http"
-	"runtime"
 )
 
 type ApplicationStarter struct {
-	AlpJwtAuth authentication.AlpJwtAuth
+	AlpJwtAuth authorization.AlpJwtAuth
 }
 
 func main() {
@@ -25,30 +19,12 @@ func main() {
 	load().run()
 }
 
-func init() {
-	// init logger
-
-	logger := logrusImp.New()
-	logger.SetReportCaller(true)
-	logger.SetFormatter(&nested.Formatter{CustomCallerFormatter: func(frame *runtime.Frame) string {
-		pc, _, line, ok := runtime.Caller(10)
-		details := runtime.FuncForPC(pc)
-		var funcName string
-		if ok && details != nil {
-			funcName = details.Name()
-			return fmt.Sprintf(" <-- (%s:%d)", funcName, line)
-		}
-		return " <-- (Unknown)"
-	}})
-	log.Current = logrus.New(logger)
-}
-
 func load() ApplicationStarter {
-	tokenProcessor := impl.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
+	tokenProcessor := authorization.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
-	webSecurity := securityConfig.WebSecurityConfig{}
-	alpAuthorizer := authorization.NewBasicRoleAuthorizer(webSecurity)
-	alpJwtAuth := impl.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
+	webSecurity := securityConfig.SecurityConfig{}
+	alpAuthorizer := accesscontrol.NewBasicRoleAuthorizer(webSecurity)
+	alpJwtAuth := authorization.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
 
 	p := ApplicationStarter{
 		AlpJwtAuth: alpJwtAuth,
@@ -64,5 +40,5 @@ func (p ApplicationStarter) run() {
 		_ = json.NewEncoder(writer).Encode("AlperTk")
 	})).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":9702", router))
+	_ = http.ListenAndServe(":9702", router)
 }

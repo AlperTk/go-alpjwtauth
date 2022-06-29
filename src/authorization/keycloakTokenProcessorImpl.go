@@ -1,8 +1,7 @@
-package impl
+package authorization
 
 import (
 	"errors"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication"
 	"github.com/Masterminds/log-go"
 	"github.com/MicahParks/keyfunc"
 	"github.com/golang-jwt/jwt/v4"
@@ -14,7 +13,7 @@ type keycloakTokenProcessor struct {
 	JwksUrl string
 }
 
-func NewKeycloakTokenProcessor(jwksUrl string) authentication.TokenProcessor {
+func NewKeycloakTokenProcessor(jwksUrl string) TokenProcessor {
 	return &keycloakTokenProcessor{jwksUrl}
 }
 

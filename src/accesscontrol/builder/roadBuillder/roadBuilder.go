@@ -3,7 +3,6 @@ package roadBuillder
 import (
 	"errors"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/src/authorization"
 	"strings"
 )
 
@@ -18,7 +17,7 @@ func NewRoadBuilder[T any]() *RoadBuilder[T] {
 
 func (r *RoadBuilder[T]) Put(road string, data *T) error {
 	r.levelCount++
-	formattedEndpoint := authorization.FormatEndpoint(road)
+	formattedEndpoint := FormatEndpoint(road)
 	splits := strings.Split(formattedEndpoint, "/")
 	splits = splits[1 : len(splits)-1]
 
@@ -50,7 +49,7 @@ func (r *RoadBuilder[T]) Put(road string, data *T) error {
 }
 
 func (r RoadBuilder[T]) Get(road string) (*T, error) {
-	formattedEndpoint := authorization.FormatEndpoint(road)
+	formattedEndpoint := FormatEndpoint(road)
 	splits := strings.Split(formattedEndpoint, "/")
 	splits = splits[1 : len(splits)-1]
 

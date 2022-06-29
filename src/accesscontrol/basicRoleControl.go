@@ -1,13 +1,12 @@
-package authorization
+package accesscontrol
 
 import (
 	"encoding/json"
 	errors2 "errors"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roadBuillder"
-	"github.com/AlperTk/go-alpjwtauth/src/authorization/builder/roleBuilder"
-	authorization "github.com/AlperTk/go-alpjwtauth/src/authorization/model"
-	authorization2 "github.com/AlperTk/go-alpjwtauth/src/authorization/service"
+	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roadBuillder"
+	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roleBuilder"
+	authorization "github.com/AlperTk/go-alpjwtauth/src/accesscontrol/model"
 	"github.com/AlperTk/go-alpjwtauth/src/errors"
 	"net/http"
 )
@@ -17,7 +16,7 @@ type basicRoleAuthorizer struct {
 	requestRoad    *roadBuillder.RoadBuilder[authorization.RoleModel]
 }
 
-func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) authorization2.AlpAuthorizer {
+func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) AlpAuthorizer {
 	instance := basicRoleAuthorizer{securityConfig: securityConfig, requestRoad: roadBuillder.NewRoadBuilder[authorization.RoleModel]()}
 	instance.loadConfig()
 	return &instance

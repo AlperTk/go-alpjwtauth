@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication"
-	"github.com/AlperTk/go-alpjwtauth/src/authentication/impl"
+	"github.com/AlperTk/go-alpjwtauth/src/authorization"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
@@ -14,7 +13,7 @@ import (
 )
 
 type ApplicationStarter struct {
-	AlpJwtAuth authentication.AlpJwtAuth
+	AlpJwtAuth authorization.AlpJwtAuth
 }
 
 func main() {
@@ -41,9 +40,9 @@ func init() {
 }
 
 func load() ApplicationStarter {
-	tokenProcessor := impl.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
+	tokenProcessor := authorization.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
-	alpJwtAuth := impl.NewJwtAuth(tokenProcessor)
+	alpJwtAuth := authorization.NewJwtAuth(tokenProcessor)
 
 	p := ApplicationStarter{
 		AlpJwtAuth: alpJwtAuth,
