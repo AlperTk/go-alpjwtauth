@@ -4,19 +4,19 @@ import (
 	"encoding/json"
 	errors2 "errors"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/builder/roadBuillder"
-	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/builder/roleBuilder"
-	authorization "github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/model"
-	"github.com/AlperTk/go-alpjwtauth/v2/src/errors"
+	"github.com/AlperTk/go-alpjwtauth/v2/accesscontrol/builder/roadBuillder"
+	roleBuilder2 "github.com/AlperTk/go-alpjwtauth/v2/accesscontrol/builder/roleBuilder"
+	"github.com/AlperTk/go-alpjwtauth/v2/accesscontrol/model"
+	"github.com/AlperTk/go-alpjwtauth/v2/errors"
 	"net/http"
 )
 
 type basicRoleAuthorizer struct {
-	securityConfig roleBuilder.SecurityConfig
+	securityConfig roleBuilder2.SecurityConfig
 	requestRoad    *roadBuillder.RoadBuilder[authorization.RoleModel]
 }
 
-func NewBasicRoleAuthorizer(securityConfig roleBuilder.SecurityConfig) AlpAuthorizer {
+func NewBasicRoleAuthorizer(securityConfig roleBuilder2.SecurityConfig) AlpAuthorizer {
 	instance := basicRoleAuthorizer{securityConfig: securityConfig, requestRoad: roadBuillder.NewRoadBuilder[authorization.RoleModel]()}
 	instance.loadConfig()
 	return &instance
@@ -89,7 +89,7 @@ func processAuthorizedRequestRoad(roles []string, r *http.Request, requestRoad *
 }
 
 func (b *basicRoleAuthorizer) loadConfig() {
-	roleConfigurer := roleBuilder.RoleConfigurer{RequestRoad: b.requestRoad}
+	roleConfigurer := roleBuilder2.RoleConfigurer{RequestRoad: b.requestRoad}
 	b.securityConfig.Config(&roleConfigurer)
 }
 

@@ -3,15 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/AlperTk/go-alpjwtauth/v2/accesscontrol"
+	authorization2 "github.com/AlperTk/go-alpjwtauth/v2/authorization"
 	"github.com/AlperTk/go-alpjwtauth/v2/internal/example/alpJwtAuthWithAccessControl/config"
-	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol"
-	"github.com/AlperTk/go-alpjwtauth/v2/src/authorization"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type ApplicationStarter struct {
-	AlpJwtAuth authorization.AlpJwtAuth
+	AlpJwtAuth authorization2.AlpJwtAuth
 }
 
 func main() {
@@ -20,11 +20,11 @@ func main() {
 }
 
 func load() ApplicationStarter {
-	tokenProcessor := authorization.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
+	tokenProcessor := authorization2.NewKeycloakTokenProcessor("https://localhost:8443/auth/realms/marsrealm/protocol/openid-connect/certs")
 
 	webSecurity := securityConfig.SecurityConfig{}
 	alpAuthorizer := accesscontrol.NewBasicRoleAuthorizer(webSecurity)
-	alpJwtAuth := authorization.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
+	alpJwtAuth := authorization2.NewJwtAuthWithAccessControl(tokenProcessor, alpAuthorizer)
 
 	p := ApplicationStarter{
 		AlpJwtAuth: alpJwtAuth,
