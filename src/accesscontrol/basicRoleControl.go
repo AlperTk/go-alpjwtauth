@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	errors2 "errors"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roadBuillder"
-	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roleBuilder"
-	authorization "github.com/AlperTk/go-alpjwtauth/src/accesscontrol/model"
-	"github.com/AlperTk/go-alpjwtauth/src/errors"
+	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/builder/roadBuillder"
+	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/builder/roleBuilder"
+	authorization "github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/model"
+	"github.com/AlperTk/go-alpjwtauth/v2/src/errors"
 	"net/http"
 )
 

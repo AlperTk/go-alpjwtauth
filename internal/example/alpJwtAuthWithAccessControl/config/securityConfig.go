@@ -1,6 +1,6 @@
 package securityConfig
 
-import "github.com/AlperTk/go-alpjwtauth/src/accesscontrol/builder/roleBuilder"
+import "github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol/builder/roleBuilder"
 
 type SecurityConfig struct {
 }

@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/internal/example/alpJwtAuthWithAccessControl/config"
-	"github.com/AlperTk/go-alpjwtauth/src/accesscontrol"
-	"github.com/AlperTk/go-alpjwtauth/src/authorization"
+	"github.com/AlperTk/go-alpjwtauth/v2/internal/example/alpJwtAuthWithAccessControl/config"
+	"github.com/AlperTk/go-alpjwtauth/v2/src/accesscontrol"
+	"github.com/AlperTk/go-alpjwtauth/v2/src/authorization"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -40,5 +40,5 @@ func (p ApplicationStarter) run() {
 		_ = json.NewEncoder(writer).Encode("AlperTk")
 	})).Methods("POST")
 
-	_ = http.ListenAndServe(":9702", router)
+	fmt.Print(http.ListenAndServe(":9702", router))
 }

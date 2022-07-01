@@ -1,4 +1,4 @@
-module github.com/AlperTk/go-alpjwtauth
+module github.com/AlperTk/go-alpjwtauth/v2
 
 go 1.18
 
