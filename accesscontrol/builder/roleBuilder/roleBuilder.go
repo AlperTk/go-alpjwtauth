@@ -1,8 +1,8 @@
 package roleBuilder
 
 import (
-	"github.com/AlperTk/go-alpjwtauth/v2/accesscontrol/builder/roadBuillder"
-	"github.com/AlperTk/go-alpjwtauth/v2/accesscontrol/model"
+	"github.com/AlperTk/go-alpjwtauth/accesscontrol/builder/roadBuillder"
+	"github.com/AlperTk/go-alpjwtauth/accesscontrol/model"
 	"github.com/Masterminds/log-go"
 )
 
