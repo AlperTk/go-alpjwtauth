@@ -1,8 +1,8 @@
 package roleBuilder
 
 import (
-	"github.com/AlperTk/go-alpjwtauth/accesscontrol/builder/roadBuillder"
-	"github.com/AlperTk/go-alpjwtauth/accesscontrol/model"
+	"github.com/AlperTk/go-alpjwtauth/pkg/v3/accesscontrol/builder/roadBuillder"
+	authorization "github.com/AlperTk/go-alpjwtauth/pkg/v3/accesscontrol/model"
 )
 
 type RoleConfigurer struct {

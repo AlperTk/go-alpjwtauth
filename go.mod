@@ -1,4 +1,4 @@
-module github.com/AlperTk/go-alpjwtauth
+module github.com/AlperTk/go-alpjwtauth/pkg/v3
 
 go 1.18
 
