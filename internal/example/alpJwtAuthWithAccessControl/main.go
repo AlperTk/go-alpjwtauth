@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/AlperTk/go-alpjwtauth/v3/accesscontrol"
-	authorization2 "github.com/AlperTk/go-alpjwtauth/v3/authorization"
-	securityConfig "github.com/AlperTk/go-alpjwtauth/v3/internal/example/alpJwtAuthWithAccessControl/config"
+	"github.com/AlperTk/go-alpjwtauth/v4/accesscontrol"
+	authorization2 "github.com/AlperTk/go-alpjwtauth/v4/authorization"
+	securityConfig "github.com/AlperTk/go-alpjwtauth/v4/internal/example/alpJwtAuthWithAccessControl/config"
 	"github.com/gorilla/mux"
 	"net/http"
 )

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	authorization2 "github.com/AlperTk/go-alpjwtauth/v3/authorization"
+	authorization2 "github.com/AlperTk/go-alpjwtauth/v4/authorization"
 	"github.com/Masterminds/log-go"
 	"github.com/Masterminds/log-go/impl/logrus"
 	nested "github.com/antonfisher/nested-logrus-formatter"
